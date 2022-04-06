@@ -1,0 +1,22 @@
+.outer-home
+{
+    width: 90vw;
+    min-width: 750px;
+    max-width: 1000px;
+    border: 1px solid red;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: row;
+    height: 90vh;
+    min-height: 600px;
+}
+.outer-left
+{
+    width: 30%;
+    border: 1px solid blue;
+}
+.outer-right
+{
+    width: 70%;
+    border: 1px solid green;
+}

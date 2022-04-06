@@ -1,0 +1,15 @@
+.outer-right-nav
+{
+    /* height: 100px; */
+    display:flex;
+    flex-direction: row;
+    position: relative;
+    align-items: center;
+    border-bottom: 1px solid gray;
+}
+.right-nav-more
+{
+    position: absolute;
+    right: 0;
+    margin-right: 10px;
+}

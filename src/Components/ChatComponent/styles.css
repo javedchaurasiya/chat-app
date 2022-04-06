@@ -1,0 +1,35 @@
+.outer-chat-container
+{
+    /* display: none; */
+    flex-grow: 1;
+    border: 1px solid maroon;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+
+.check
+{
+
+    border: 1px solid green;
+    flex-grow: 1;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+.inner-chat-container
+{
+    height: 100%;
+    position: relative;
+    background: white;
+    
+
+}
+.inner-chat-container > div{
+    /* background: pink; */
+    display: flex;
+    flex-direction: column;
+    /* padding-top: 130px;
+    padding-bottom: 20px; */
+}
+

@@ -1,0 +1,18 @@
+.outer-left-nav
+{
+    border: 1px solid blueviolet;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    /* padding: 10px; */
+    position: relative;
+    align-items: center;
+}
+.add-new-container
+{
+    position: absolute;
+    right: 0;
+    margin-right: 10px;
+    /* border: 1px solid black; */
+    /* vertical-align: middle; */
+}

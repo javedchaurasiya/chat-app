@@ -1,0 +1,38 @@
+.l-message
+{
+    /* display: none; */
+    /* border: 1px solid black; */
+    max-width: 70%;
+    width: fit-content;
+    background: rgb(245,245,245);
+    border-radius: 20px;
+    border-bottom-left-radius: 5px;
+    padding: 0 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    /* position: relative; */
+    margin-left: 3px;
+}
+.message-header
+{
+    font-size: 11px;
+}
+.message-body
+{
+    font-size: 14px;
+    word-break: break-all;
+}
+.message-fotter
+{
+    /* float: right; */
+    /* position: relative; */
+    width: fit-content;
+    align-self: flex-end;
+    margin-top: 3px;
+    /* border: 1px solid red; */
+    font-size: 11px;
+}
+
+
