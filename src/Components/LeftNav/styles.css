@@ -16,3 +16,41 @@
     /* border: 1px solid black; */
     /* vertical-align: middle; */
 }
+.modal-popup
+{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid red;
+    height: 100%;
+}
+.search-box
+{
+    /* display: none; */
+}
+.search-box > div >div{
+    border-radius: 40px;
+    /* display: none; */
+}
+.search-results
+{
+    margin-top: 20px;
+    border: 1px solid black;
+    flex-grow: 1;
+    overflow: auto;
+}
+
+.user-result-container
+{
+    width: 95%;
+    margin: 0 auto;
+    padding: 8px;
+    border: 1px solid magenta;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}
+.userName-container
+{
+    margin-left: 20px;
+    margin-top: 5px;
+}

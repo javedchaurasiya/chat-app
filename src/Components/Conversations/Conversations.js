@@ -2,10 +2,11 @@ import React from 'react'
 import './styles.css'
 import Conversation from '../Conversation/Conversation.js'
 
-function Conversations() {
+function Conversations({conversations,focussed,changeFocussed}) {
   return (
     
     <div className="outer-conversations">
+    {/* <Conversation/>
     <Conversation/>
     <Conversation/>
     <Conversation/>
@@ -14,8 +15,8 @@ function Conversations() {
     <Conversation/>
     <Conversation/>
     <Conversation/>
-    <Conversation/>
-    <Conversation/>
+    <Conversation/> */}
+    {conversations.map((conversation)=><Conversation key={conversation.id} conversation={conversation} changeFocussed={changeFocussed}/>)}
     </div>
     
   )

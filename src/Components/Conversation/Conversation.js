@@ -2,18 +2,21 @@ import { Avatar } from '@mui/material'
 import React from 'react'
 import './styles.css'
 
-function Conversation() {
+function Conversation({conversation,changeFocussed}) {
   return (
-    <div className='main-conversation'>
+    <div className='main-conversation' onClick={()=>{
+      // console.log('div-clicked');
+      changeFocussed(conversation.id)
+    }}>
         <Avatar
-        alt="Ritik"
-        src="https://pps.whatsapp.net/v/t61.24694-24/224185179_798810734854325_8441149062753365806_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=11841b29e90f68677f623bf12582677d&oe=624EBBDC"
+        alt={conversation.to}
+        src={conversation.imageURL}
         sx={{ width: 50, height: 50,m:'9px' }}
       />
       <div className="user-conversation-details">
-          <div>Ritu Raj</div>
+          <div>{conversation.to}</div>
           <div className="last-conversation">
-          Hey, This is Ritu Raj Shandilya. Yfuivciuy UViyvb scdsc
+          {conversation.conversation.length?conversation.conversation[conversation.conversation.length-1].content:''}
       </div>
           
       </div>

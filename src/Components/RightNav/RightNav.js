@@ -3,15 +3,15 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React from 'react'
 import './styles.css'
 
-function RightNav() {
+function RightNav({conversations,focussed}) {
   return (
     <div className='outer-right-nav'>
         <Avatar
-        alt="Ritik"
-        src="https://pps.whatsapp.net/v/t61.24694-24/224185179_798810734854325_8441149062753365806_n.jpg?stp=dst-jpg_s96x96&ccb=11-4&oh=11841b29e90f68677f623bf12582677d&oe=624EBBDC"
+        alt={focussed.to}
+        src={focussed.imageURL}
         sx={{ width: 54, height: 54,margin:'8px' }}
       />
-      <div style={{marginLeft:'10px'}}>Ritik</div>
+      <div style={{marginLeft:'10px'}}>{focussed.to}</div>
     <div className="right-nav-more">
         <MoreVertIcon/>
     </div>

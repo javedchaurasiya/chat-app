@@ -3,11 +3,11 @@ import LeftNav from "../LeftNav/LeftNav.js";
 import Conversations from "../Conversations/Conversations.js";
 import './styles.css'
 
-function Left() {
+function Left({conversations,focussed,changeFocussed,addUserToChat}) {
   return (
     <div className="outer-left-container">
-      <LeftNav />
-      <Conversations />
+      <LeftNav addUserToChat={addUserToChat} />
+      <Conversations conversations={conversations} focussed={focussed} changeFocussed={changeFocussed} />
     </div>
   );
 }

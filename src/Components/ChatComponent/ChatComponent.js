@@ -1,39 +1,68 @@
 import { TextField } from "@mui/material";
-import React from "react";
+import InputEmoji from "react-input-emoji";
+import { React, useState } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
-import LeftChat from '../LeftChat/LeftChat.js'
-import RightChat from '../RightChat/RightChat.js'
+import LeftChat from "../LeftChat/LeftChat.js";
+import RightChat from "../RightChat/RightChat.js";
+import { selectUser } from "../../features/userSlice.js";
+import { useSelector } from "react-redux";
+import randomBytes from "randombytes";
 import "./styles.css";
 
-function ChatComponent() {
+function ChatComponent({ conversations, focussed, sendMessage }) {
+  const user = useSelector(selectUser);
+  const [messageBody, setMessageBody] = useState("");
+  const handleOnEnter = () => {
+    const message = {
+      from: user.userName,
+      to: focussed.to,
+      content: messageBody,
+      timeline: Date.now(),
+      id: randomBytes(10).toString("hex"),
+    };
+    setMessageBody('')
+    // console.log(message);
+    sendMessage(message)
+
+  };
   return (
-    // <div className="abcd"></div>
     <div className="outer-chat-container">
-      
       <div className="check">
-      <ScrollToBottom className="inner-chat-container">
-        <LeftChat message={{user:'Ritik',content:'Hey whatsup.',timeline:'Tue 12:08 PM 22/03/2022'}}/>
-        <RightChat message={{user:'Me',content:'Nothing',timeline:'Tue 12:08 PM 22/03/2022'}}/>
-        <LeftChat message={{user:'Ritik',content:'csdjcbsucccccccccccccccccccccccccccccdcccccccccccccc sybc scsyuc sycv scysv cc sycv',timeline:'Tue 12:08 PM 22/03/2022'}}/>
-        <RightChat message={{user:'Me',content:'efefef ehfbe eufbd vuisb ivubv isubvs visubvs vsubv svius',timeline:'Tue 12:08 PM 22/03/2022'}}/>
-        <LeftChat message={{user:'Ritik',content:'Hey whatsup.',timeline:'Tue 12:08 PM 22/03/2022'}}/>
-        <RightChat message={{user:'Me',content:'Nothing',timeline:'Tue 12:08 PM 22/03/2022'}}/>
-        <LeftChat message={{user:'Ritik',content:'csdjcbsu sybc scsyuc sycv scysv cc sycv',timeline:'Tue 12:08 PM 22/03/2022'}}/>
-        <RightChat message={{user:'Me',content:'efefef ehfbe eufbd vuisb ivubv isubvs visubvs vsubv svius',timeline:'Tue 12:08 PM 22/03/2022'}}/>
-        <RightChat message={{user:'Me',content:'efefef ehfbe eufbd vuisb ivubv isubvs visubvs vsubv svius',timeline:'Tue 12:08 PM 22/03/2022'}}/>
-        <RightChat message={{user:'Me',content:'efefef ehfbe eufbd vuisb ivubv isubvs visubvs vsubv svius',timeline:'Tue 12:08 PM 22/03/2022'}}/>
-        
-      </ScrollToBottom>
+        <ScrollToBottom className="inner-chat-container">
+          {focussed.conversation.map((msg) => {
+            if (focussed.to == msg.from)
+              return (
+                <LeftChat
+                  key={msg.id}
+                  message={{
+                    user: msg.from,
+                    content: msg.content,
+                    timeline: msg.timeline,
+                  }}
+                />
+              );
+            else
+              return (
+                <RightChat
+                  key={msg.id}
+                  message={{
+                    user: "Me",
+                    content: msg.content,
+                    timeline: msg.timeline,
+                  }}
+                />
+              );
+          })}
+        </ScrollToBottom>
       </div>
       <div className="chat-textfield-container">
-      <TextField
-      fullWidth
-        className="chat-text-field"
-        id="outlined-multiline-flexible"
-        label="Multiline"
-        multiline
-        maxRows={4}
-      />
+        <InputEmoji
+          value={messageBody}
+          onChange={setMessageBody}
+          cleanOnEnter
+          onEnter={handleOnEnter}
+          placeholder="Type a message"
+        />
       </div>
     </div>
   );
