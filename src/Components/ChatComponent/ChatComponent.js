@@ -22,7 +22,7 @@ function ChatComponent({ conversations, focussed, sendMessage }) {
     };
     setMessageBody('')
     // console.log(message);
-    sendMessage(message)
+    sendMessage(message,focussed.imageURL)
 
   };
   return (

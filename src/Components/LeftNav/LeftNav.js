@@ -6,13 +6,17 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useSelector, useDispatch } from "react-redux";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import { selectUser, logout } from "../../features/userSlice";
+import { selectUser, logout, login } from "../../features/userSlice";
 import InputAdornment from "@mui/material/InputAdornment";
 import CircularProgress from "@mui/material/CircularProgress";
 import "./styles.css";
 import { TextField } from "@mui/material";
 import axios from "axios";
 import getServerURL from "../../serverURL";
+import IconButton from "@mui/material/IconButton";
+import { styled } from "@mui/material/styles";
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import Tooltip from '@mui/material/Tooltip';
 import Alert from "../MyAlert/MyAlert";
 
 const style = {
@@ -28,6 +32,10 @@ const style = {
   height: 450,
 };
 
+const Input = styled("input")({
+  display: "none",
+});
+
 const userResult = (name, userName, imageURL, getUserChat) => {
   return (
     <div key={userName} className="user-result-container">
@@ -36,6 +44,7 @@ const userResult = (name, userName, imageURL, getUserChat) => {
         <div>{name}</div>
         <div style={{ fontSize: "12px" }}>{userName}</div>
       </div>
+      <Tooltip title="Add User" arrow>
       <AddCommentIcon
         sx={{
           position: "absolute",
@@ -48,6 +57,7 @@ const userResult = (name, userName, imageURL, getUserChat) => {
           getUserChat(userName, imageURL);
         }}
       />
+      </Tooltip>
     </div>
   );
 };
@@ -124,6 +134,48 @@ function LeftNav({ addUserToChat }) {
     }
   };
 
+  const uploadUserAvatar = async (e) => {
+    // console.log('check');
+    // console.log(e.target.files[0]);
+    setAlert({ ...alert, display: false });
+    try {
+      if (!e.target.files) {
+        setAlert({
+          display: true,
+          severity: "warning",
+          message: "Image Needed",
+        });
+        return;
+      }
+      const formData = new FormData();
+      formData.append("file", e.target.files[0]);
+      const response = await axios.post(
+        getServerURL() + "imageUpload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            authentication: "Bearer " + localStorage.token,
+          },
+        }
+      );
+      // console.log(response.data);
+      dispatch(login({ ...user, imageURL: response.data.imageURL }));
+      setAlert({
+        display: true,
+        severity: "success",
+        message: "Avatar Updated Successfully",
+      });
+    } catch (error) {
+      setAlert({
+        display: true,
+        severity: "error",
+        message: "Error Uploading Image",
+      });
+      console.log(error);
+    }
+  };
+
   return (
     <>
       {alert.display && (
@@ -171,9 +223,27 @@ function LeftNav({ addUserToChat }) {
           sx={{ width: 54, height: 54, margin: "8px" }}
         />
         <div className="add-new-container">
-          <LogoutIcon onClick={logoutUser} sx={{ mr: 1 }} />
-          <AddCommentIcon sx={{ mr: 1 }} onClick={()=>setOpenModal(true)} />
-          <MoreVertIcon />
+          <Tooltip title="Logout" arrow><LogoutIcon onClick={logoutUser} sx={{ mr: 0.5 }} /></Tooltip>
+          <Tooltip title="Add User to Chat" arrow><AddCommentIcon sx={{ mr: 0 }} onClick={() => setOpenModal(true)} /></Tooltip>
+          {/* <MoreVertIcon /> */}
+
+          <label htmlFor="icon-button-file">
+            <Input
+              accept="image/*"
+              id="icon-button-file"
+              type="file"
+              onChange={uploadUserAvatar}
+            />
+            <Tooltip title="Update Avatar" arrow>
+            <IconButton
+              color="primary"
+              aria-label="upload picture"
+              component="span"
+            >
+              <PhotoCamera />
+            </IconButton>
+            </Tooltip>
+          </label>
         </div>
       </div>
     </>

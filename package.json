@@ -15,6 +15,7 @@
     "buffer": "^6.0.3",
     "expo-crypto": "^10.1.2",
     "expo-random": "^12.1.2",
+    "moment": "^2.29.2",
     "randombytes": "^2.1.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",

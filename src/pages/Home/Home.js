@@ -14,7 +14,7 @@ import "./styles.css";
 import MyAlert from "../../Components/MyAlert/MyAlert";
 
 const serverURL = getServerURL();
-var socket;
+let socket;
 
 function Home() {
   const [alert, setAlert] = useState({
@@ -27,6 +27,7 @@ function Home() {
   const [conversations, setConversations] = useState([]);
   const [focussed, setFocussed] = useState(null);
   const [loading, setLoading] = useState(true);
+  // const [mySocket, setMySocket] = useState(null);
   const ENDPOINT = "localhost:2000";
 
   useEffect(() => {
@@ -42,7 +43,7 @@ function Home() {
           }
         );
         setConversations(response.data.conversations);
-        setFocussed(response.data.conversations[0]);
+        setFocussed({...response.data.conversations[0]});
       } catch (error) {
         console.log(error);
         // alert("error");
@@ -53,36 +54,42 @@ function Home() {
   }, []);
 
   useEffect(() => {
+    // console.log(typeof socket);
+    // if(user&&socket&&socket.connected==true)
+    // {
+    //   console.log('Still connected');
+    //   return
+    // }
     const socketConnect = () => {
       console.log("Connecting");
+      // console.log(socket);
       socket = io(ENDPOINT);
+      // setMySocket(socket)
       socket.on("connect", () => {
-        // console.log('connectec');
         console.log(socket.connected);
       });
       // socket.emit("userDetails", user.userName);
       socket.on("requestDetails", () => {
         socket.emit("getDetails", user.userName);
       });
-      socket.on("onMessage", (message) => {
+      socket.on("onMessage", (message, imageURL) => {
         // console.log(message);
-        onMessage(message);
+        onMessage(message, imageURL,focussed);
       });
-      console.log(socket);
+      // console.log(socket);
     };
-    if (user) socketConnect();
-    return () => {
-      if (user) socket.emit("removeUser", user.userName);
-    };
-  }, [ENDPOINT, user,conversations,focussed]);
+    if(user)socketConnect();
 
-  useEffect(() => {
-    console.log("focussed changed");
-    console.log(focussed);
-  }, [focussed]);
-  useEffect(() => {
-    console.log("rendered first");
-  }, []);
+    return ()=> {if(socket)socket.disconnect()}
+    
+  }, [ENDPOINT, user,focussed,conversations,socket]);
+
+  
+
+  // useEffect(() => {
+  //   console.log("focussed changed");
+  //   if(focussed)console.log(focussed.to);
+  // }, [focussed]);
 
   const changeFocussed = (conversationId) => {
     const newFocussed = conversations.find(
@@ -102,30 +109,66 @@ function Home() {
     setFocussed(conversation);
   };
 
-  const checkFocussed = () => {
-    console.log(focussed);
-  };
+  const getFocus=()=>{
+    return {...focussed};
+  }
 
-  
-
-  const onMessage = (message) => {
-    checkFocussed();
+  const onMessage = (message, imageURL,focussed) => {
+    // checkFocussed();
+    // let nf=getFocus();
+    // console.log(nf);
     setAlert({ ...alert, display: false });
-    console.log(message);
-    console.log(focussed);
+    // console.log(message);
+    // console.log(imageURL);
+    // console.log(focussed.to);
+    // console.log(conversations);
     if (focussed.to != message.from) {
-      console.log("new message");
+      // console.log(focussed.to);
+      // console.log("new message");
       setAlert({
         display: true,
         severity: "info",
         message: `New Message from ${message.from}`,
       });
+      let senderFound = conversations.find((conversation) => {
+        return conversation.to == message.from;
+      });
+      let newConversations = conversations.filter((conversation) => {
+        return conversation.to != message.from;
+      });
+      // console.log('debug');
+      if (!senderFound) {
+        // console.log('sender not found');
+        senderFound = {
+          id: randomBytes(10).toString("hex"),
+          to: message.from,
+          imageURL,
+          conversation: [],
+        };
+        
+      }
+      // console.log('sender found');
+      senderFound.conversation.push(message);
+      newConversations.unshift(senderFound);
+      setConversations(newConversations);
+      // console.log('inside if');
+    } else {
+      // console.log("Doing Things");
+      let newConversations = conversations.filter((conversation) => {
+        return conversation.id != focussed.id;
+      });
+      focussed.conversation.push(message);
+      newConversations.unshift(focussed);
+      setConversations([...newConversations]);
+      setFocussed({ ...focussed });
+      // console.log('inside else');
     }
   };
 
-  const sendMessage = async (message) => {
+  const sendMessage = async (message, imageURL) => {
     // console.log(socket);
-    console.log("entered sendMessage");
+    // console.log("entered sendMessage");
+    // console.log(imageURL);
     setAlert({ ...alert, display: false });
     try {
       focussed.conversation.push(message);
@@ -138,8 +181,8 @@ function Home() {
         }
       }
       addUserToChat(focussed);
-      socket.emit("message", message);
-      console.log("sent");
+      socket.emit("message", message, imageURL);
+      // console.log("sent");
       const response = await axios.post(
         getServerURL() + "sendMessage",
         { message },
@@ -149,10 +192,10 @@ function Home() {
           },
         }
       );
-      console.log(response);
+      // console.log(response);
       setAlert({ display: true, severity: "success", message: "Message Sent" });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setAlert({
         display: true,
         severity: "error",
@@ -171,6 +214,7 @@ function Home() {
         <MyAlert severity={alert.severity} message={alert.message} />
       )}
       <div className="outer-left">
+        
         <Left
           conversations={conversations}
           focussed={focussed}

@@ -11,6 +11,7 @@ export const userSlice = createSlice({
       state.user = action.payload;
     },
     logout: (state) => {
+      localStorage.token=''
       state.user = null;
     },
   },
