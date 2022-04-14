@@ -20,6 +20,7 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-input-emoji": "^4.1.0",
+    "react-modal-image": "^2.5.0",
     "react-redux": "^7.2.8",
     "react-router": "^6.3.0",
     "react-router-dom": "^6.3.0",

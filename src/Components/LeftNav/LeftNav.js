@@ -72,6 +72,7 @@ function LeftNav({ addUserToChat }) {
   const [searchResult, setSearchResult] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [openModal, setOpenModal] = useState(false);
+  const [openImageModal, setOpenImageModal] = useState(false);
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const logoutUser = () => {
@@ -182,6 +183,23 @@ function LeftNav({ addUserToChat }) {
         <Alert severity={alert.severity} message={alert.message} />
       )}
       <Modal
+        open={openImageModal}
+        onClose={() => {
+          setOpenImageModal(false);
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div className="imageModal">
+          <Avatar
+            variant="rounded"
+            alt={user.userName}
+            src={user.imageURL}
+            sx={{ width: 'auto', height: 'auto' }}
+          />
+        </div>
+      </Modal>
+      <Modal
         open={openModal}
         onClose={() => {
           setOpenModal(false);
@@ -218,6 +236,7 @@ function LeftNav({ addUserToChat }) {
       </Modal>
       <div className="outer-left-nav">
         <Avatar
+          onClick={()=>{setOpenImageModal(true)}}
           alt={user.userName}
           src={user.imageURL}
           sx={{ width: 54, height: 54, margin: "8px" }}

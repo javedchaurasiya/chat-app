@@ -23,5 +23,21 @@
   font-size: 12px;
   /* z-index: -1; */
 }
+.imageModal
+{
+  /* background: white; */
+  width: fit-content;
+  max-width: 500px;
+  margin: 0 auto;
+  margin-top: 100px;
+  height: fit-content;
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 15px;
+}
 
 
